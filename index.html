@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>파리·바르셀로나·마요르카 숙소</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 모바일 우선. 고정 상단(제목+도시 탭) → 금액 요약(합계 먼저) → 숙소 카드 1열(태블릿 2열, 데스크톱 3열) → 동네 가이드 */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --line:#dde0e7; --fg:#1d2230; --muted:#626a7d;
+  --paris:#2f4a7a; --paris-soft:#e4eaf5;
+  --bcn:#b8750a; --bcn-soft:#fbefd9;
+  --mlr:#13777f; --mlr-soft:#dcf1f2;
+  --good:#1f7a4d; --good-soft:#e1f2e8; --bad:#b03a2e;
+  --accent:var(--paris); --accent-soft:var(--paris-soft);
+  --f-display:"Gowun Batang",ui-serif,Georgia,serif;
+  --f-body:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13161d; --surface:#1b1f29; --line:#2c3240; --fg:#e7e9ef; --muted:#9aa2b4;
+  --paris:#8fa9dc; --paris-soft:#223050; --bcn:#e9a940; --bcn-soft:#3d2d12; --mlr:#5cc4cc; --mlr-soft:#123a3d;
+  --good:#5fca91; --good-soft:#163a28; --bad:#ef7c70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13161d; --surface:#1b1f29; --line:#2c3240; --fg:#e7e9ef; --muted:#9aa2b4;
+  --paris:#8fa9dc; --paris-soft:#223050; --bcn:#e9a940; --bcn-soft:#3d2d12; --mlr:#5cc4cc; --mlr-soft:#123a3d;
+  --good:#5fca91; --good-soft:#163a28; --bad:#ef7c70; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
+body.c-bcn{--accent:var(--bcn);--accent-soft:var(--bcn-soft)}
+body.c-mlr{--accent:var(--mlr);--accent-soft:var(--mlr-soft)}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.3}
+h1,h2{font-family:var(--f-display)}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ── 모바일 기본 ───────────────────────── */
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:0 48px;display:grid;gap:22px}
+
+/* 상단 고정 바: 제목 + 도시 탭 */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;margin-inline:-16px;padding:12px 16px 10px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:grid;gap:10px}
+.top h1{font-size:20px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg button{border:0;background:none;min-height:40px;padding:0 4px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+body:not(.c-bcn):not(.c-mlr) .seg button[data-city="all"][aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+
+/* 금액 요약 */
+.stats{display:grid;gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 16px;min-width:0;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"k v" "n pp";gap:2px 12px;align-items:baseline}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--accent))}
+.stat .k{grid-area:k;font-size:13px;font-weight:600;color:var(--c,var(--muted))}
+.stat .v{grid-area:v;font-size:21px;font-weight:600;line-height:1.2;text-align:right}
+.stat .n{grid-area:n;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stat .pp{grid-area:pp;font-size:13px;font-weight:600;color:var(--muted);text-align:right}
+.stat.sum{background:var(--fg);border-color:var(--fg);color:var(--bg);padding:18px 18px 16px;
+  grid-template-columns:1fr;grid-template-areas:"k" "v" "pp" "n";gap:2px}
+.stat.sum::before{display:none}
+.stat.sum .k{color:var(--bg);opacity:.75}
+.stat.sum .v{font-size:34px;text-align:left;margin-top:2px}
+.stat.sum .pp{color:var(--bg);font-size:16px;text-align:left}
+.stat.sum .n{color:var(--bg);opacity:.6;font-size:12.5px;margin-top:4px}
+
+/* 목록 머리 */
+.bar{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.bar h2{font-size:19px}
+.sort{appearance:none;-webkit-appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border:1px solid var(--line);border-radius:999px;padding:8px 32px 8px 14px;font-size:13.5px;font-weight:500;min-height:38px}
+.field{display:grid;gap:4px;min-width:0}
+.field label{font-size:12px;color:var(--muted);letter-spacing:.02em}
+.field input,.field select,.field textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box;font-size:16px}
+.field textarea{min-height:72px;resize:vertical}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:0 14px;min-height:40px;cursor:pointer;font-weight:600;font-size:14px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.btn.small{min-height:36px;padding:0 12px;font-size:13px}
+.btn.danger{color:var(--bad)}
+
+/* 숙소 카드 */
+.grid{display:grid;gap:30px}
+.group{display:grid;gap:12px}
+.group-h{display:flex;align-items:baseline;gap:10px;padding-bottom:8px;border-bottom:2px solid var(--c)}
+.group-h h3{font-family:var(--f-display);font-size:20px;color:var(--c)}
+.group-h span{font-size:13px;color:var(--muted);font-weight:500}
+.cards{display:grid;gap:14px}
+.card{--accent:var(--c);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px;position:relative;min-width:0}
+.card.pick{border-color:var(--good);box-shadow:0 0 0 1.5px var(--good)}
+.card .head{display:grid;gap:3px;padding-right:58px}
+.card .city{font-size:12px;font-weight:600;color:var(--c)}
+.card h3{font-size:18px;line-height:1.35;overflow-wrap:anywhere}
+.card .area{color:var(--muted);font-size:13px}
+.price{display:grid;gap:2px;padding:12px 14px;border-radius:12px;background:var(--accent-soft)}
+.price .total{font-size:28px;font-weight:600;line-height:1.15}
+.price .per{color:var(--muted);font-size:13px}
+.rows{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px;margin:0}
+.rows dt{color:var(--muted)} .rows dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--fg)}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--good-soft);color:var(--good)}
+.badge.ex{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.notes{display:grid;gap:12px}
+.notes h4{margin:0 0 4px;font-size:12.5px;letter-spacing:.03em;font-weight:600}
+.notes ul{margin:0;padding-left:18px;font-size:14px;display:grid;gap:3px}
+.notes li.hl{list-style:none;margin-left:-18px;padding:4px 8px;border-radius:8px;background:var(--good-soft);font-weight:600}
+.notes li.hl::before{content:"★ ";color:var(--good)}
+.notes .pro h4{color:var(--good)} .notes .con h4{color:var(--bad)} .notes .todo h4{color:var(--c)}
+.revs{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:auto}
+.rev-btn{display:flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding:0 14px;border-radius:12px;
+  background:var(--c);color:var(--surface);font-weight:600;font-size:15px;text-decoration:none;text-align:center;line-height:1.3}
+.rev-btn:active{transform:scale(.98)}
+.rev-btn small{font-weight:500;opacity:.85}
+.rev-none{margin-top:auto;padding:14px;border:1px dashed var(--line);border-radius:12px;text-align:center;font-size:13px;color:var(--muted)}
+.memo{font-size:13.5px;color:var(--muted);margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.actions{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px}
+.actions .btn{min-height:40px;padding:0 6px;font-size:13px}
+.book{font-size:14px;font-weight:600;color:var(--c);text-align:center;padding:4px 0}
+.score{position:absolute;top:16px;right:16px;text-align:center;min-width:46px;padding:5px 6px;border-radius:10px;background:var(--accent-soft)}
+.score b{display:block;font-size:17px} .score span{font-size:10px;color:var(--muted)}
+.empty{border:1px dashed var(--line);border-radius:14px;padding:28px;text-align:center;color:var(--muted)}
+
+/* 수정 화면: 모바일은 아래에서 올라오는 시트 */
+dialog{border:0;border-radius:20px 20px 0 0;background:var(--surface);color:var(--fg);padding:0;
+  width:100%;max-width:100%;max-height:92vh;margin:auto 0 0;box-sizing:border-box}
+dialog::backdrop{background:rgb(10 12 20 / .45)}
+dialog form{padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checks{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px}
+.checks label{display:flex;gap:6px;align-items:center;min-height:32px}
+
+/* 동네 가이드: 가로 스크롤 카드 */
+.guide{display:grid;gap:22px}
+.guide h2{font-size:19px}
+.areas{display:grid;grid-auto-flow:column;grid-auto-columns:78%;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
+  margin-inline:-16px;padding:2px 16px 6px;scrollbar-width:none}
+.areas::-webkit-scrollbar{display:none}
+.areas article{scroll-snap-align:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.areas h3{margin:0 0 4px;font-size:15.5px}
+.areas .tag{font-size:12px;color:var(--accent);font-weight:600}
+.areas p{margin:6px 0 0;font-size:13.5px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);margin:0}
+.foot{display:grid;gap:8px}
+
+/* ── 태블릿 이상 ───────────────────────── */
+@media (min-width:720px){
+  .wrap{padding-inline:24px;gap:28px}
+  .top{margin-inline:-24px;padding:14px 24px 12px;grid-template-columns:1fr auto;align-items:center}
+  .top h1{font-size:24px}
+  .seg{width:auto;grid-template-columns:repeat(4,auto)}
+  .seg button{padding:0 16px}
+  .stats{grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{grid-template-columns:1fr;grid-template-areas:"k" "v" "pp" "n";padding:16px 18px;gap:2px}
+  .stat::before{left:0;right:0;bottom:auto;width:auto;height:4px}
+  .stat .v{text-align:left;font-size:24px}
+  .stat .pp{text-align:left}
+  .stat.sum{grid-column:auto}
+  .stat.sum .v{font-size:28px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .areas{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));overflow:visible;margin-inline:0;padding:0}
+  dialog{border-radius:18px;width:min(560px,calc(100vw - 48px));margin:auto}
+}
+@media (min-width:1080px){
+  .cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .wrap{padding-inline:32px;gap:34px;max-width:1200px}
+  .top{margin-inline:-32px;padding:16px 32px 14px}
+  .top h1{font-size:26px}
+  .stat .v{font-size:26px}
+  .stat.sum .v{font-size:32px}
+  .card{padding:20px}
+  .card:hover{border-color:color-mix(in srgb,var(--c) 45%,var(--line))}
+}
+@media (prefers-reduced-motion:reduce){.rev-btn:active{transform:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>파리·바르셀로나·마요르카 숙소</h1>
+    <div class="seg" role="group" aria-label="도시 선택">
+      <button type="button" data-city="all" aria-pressed="true">전체</button>
+      <button type="button" data-city="paris" aria-pressed="false">파리</button>
+      <button type="button" data-city="bcn" aria-pressed="false">바르셀로나</button>
+      <button type="button" data-city="mlr" aria-pressed="false">마요르카</button>
+    </div>
+  </header>
+
+  <section class="stats" id="stats" aria-label="요약"></section>
+
+  <section style="display:grid;gap:14px">
+    <div class="bar">
+      <h2 id="list-title">후보 숙소</h2>
+      <select id="sort" class="sort" aria-label="정렬">
+            <option value="total">총액 낮은 순</option>
+            <option value="rating">평점 높은 순</option>
+            <option value="metro">역까지 가까운 순</option>
+            <option value="value">가성비 (평점/1박가)</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="foot">
+      <p class="note"><b style="color:var(--good)">★</b> 표시는 같은 도시의 다른 후보에는 없는 차별점입니다 (적어 둔 정보 기준).</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button class="btn small" id="copy" type="button">비교표 복사</button>
+        <button class="btn small" id="clear-ex" type="button">예시 숙소 지우기</button>
+        <span class="note" id="copy-msg" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="guide" id="guide"></section>
+</div>
+
+<dialog id="dlg">
+  <form id="form" method="dialog">
+    <h2 id="dlg-title">숙소 수정</h2>
+    <div class="two">
+      <div class="field"><label for="f-city">도시</label>
+        <select id="f-city"><option value="paris">파리</option><option value="bcn">바르셀로나</option><option value="mlr">마요르카</option></select></div>
+      <div class="field"><label for="f-type">유형</label>
+        <select id="f-type"><option>호텔</option><option>아파트·에어비앤비</option><option>호스텔</option><option>B&amp;B</option><option>한인민박</option></select></div>
+    </div>
+    <div class="field"><label for="f-name">숙소 이름</label><input id="f-name" required placeholder="예: Hôtel du Petit Moulin"></div>
+    <div class="two">
+      <div class="field"><label for="f-area">동네</label><input id="f-area" list="area-list" placeholder="마레, 에이샴플레…"></div>
+      <div class="field"><label for="f-price">1박 요금 (€, 세금 포함)</label><input id="f-price" type="number" min="0" step="1" placeholder="모르면 비워두기"></div>
+      <div class="field"><label for="f-krw">또는 1박 요금 (원)</label><input id="f-krw" type="number" min="0" step="1000" placeholder="원화로 봤다면 여기에"></div>
+      <div class="field"><label for="f-rating">평점 (10점 만점)</label><input id="f-rating" type="number" min="0" max="10" step="0.1"></div>
+      <div class="field"><label for="f-metro">역까지 도보 (분)</label><input id="f-metro" type="number" min="0"></div>
+    </div>
+    <div class="field"><label>포함·조건</label>
+      <div class="checks" id="f-checks"></div></div>
+    <div class="field"><label for="f-link">링크</label><input id="f-link" type="url" placeholder="https://"></div>
+    <div class="field"><label for="f-pros">장점 (한 줄에 하나, 차별점은 맨 앞에 ★)</label><textarea id="f-pros"></textarea></div>
+    <div class="field"><label for="f-cons">단점·주의 (한 줄에 하나)</label><textarea id="f-cons"></textarea></div>
+    <div class="field"><label for="f-todo">예약 때 할 일 (한 줄에 하나)</label><textarea id="f-todo"></textarea></div>
+    <div class="field"><label for="f-reviews">블로그 후기 링크 (한 줄에 하나, 앞에 객실명을 쓰면 객실별로 묶임)</label><textarea id="f-reviews" placeholder="더블룸 https://blog.naver.com/…"></textarea></div>
+    <div class="field"><label for="f-memo">기타 메모</label><textarea id="f-memo" placeholder="체크인 시간 등"></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:end">
+      <button class="btn" type="button" id="cancel">취소</button>
+      <button class="btn primary" type="submit">저장</button>
+    </div>
+  </form>
+</dialog>
+<datalist id="area-list"></datalist>
+
+<script>
+const FEATURES=[["breakfast","조식"],["cancel","무료 취소"],["kitchen","주방"],["washer","세탁기"]];
+const CITY={paris:"파리",bcn:"바르셀로나",mlr:"마요르카"};
+const CITIES=Object.keys(CITY);
+const AREAS={
+  paris:[
+    ["마레 (3·4구)","분위기·맛집","골목 카페와 편집숍이 많고 퐁피두, 보주 광장이 가깝습니다. 1·11호선으로 이동이 편합니다."],
+    ["생제르맹데프레 (6구)","치안·산책","조용하고 고급스러운 동네입니다. 오르세, 뤽상부르 공원까지 걸어갈 수 있고 가격대는 높은 편입니다."],
+    ["라탱 지구 (5구)","가성비·중심","노트르담, 소르본 주변으로 소형 호텔이 많습니다. RER B로 공항(CDG) 직행이 됩니다."],
+    ["오페라·생라자르 (9구)","교통·쇼핑","백화점과 루아시버스 정류장이 가깝습니다. 노선이 많이 지나 일정 짜기 쉽습니다."],
+    ["몽마르트르 (18구)","저렴·언덕","가격이 낮고 경치가 좋지만 언덕이 많습니다. 피갈·바르베스 쪽은 밤에 주의하세요."]],
+  bcn:[
+    ["고딕 지구","관광지 도보","대성당과 람블라스가 바로 앞입니다. 방이 작고 밤 소음, 소매치기를 감안하세요."],
+    ["엘 보른","분위기·맛집","피카소 미술관 주변 골목에 바와 타파스 집이 많습니다. 바닷가까지 걸어갈 수 있습니다."],
+    ["에이샴플레","치안·교통","격자형 대로 구역으로 카사 바트요, 사그라다 파밀리아와 가깝습니다. 처음 가는 경우 무난합니다."],
+    ["그라시아","현지 동네","광장과 작은 식당이 많은 조용한 동네입니다. 구엘 공원 가기 좋고 중심까지 지하철 10분 안팎입니다."],
+    ["바르셀로네타","해변","해변 바로 옆이지만 여름엔 붐비고 지하철 노선이 적습니다."]]
+};
+
+const KEY="stay-compare-v1";
+const load=()=>{try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.items))return v}catch(e){}return null};
+const SEEDS=[
+  {id:"seed-citadines-ramblas",v:10,hl:["주방·테이블 있음 (스튜디오)", "마트 바로 앞 (까르푸, 바르셀로나 최대 규모)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"시타딘 람블라스",area:"람블라스 (카탈루냐 광장 근처)",
+   price:null,krw:1491343/4,quote:"4박 ₩1,491,343 (스튜디오)",rating:null,metro:4,f:["kitchen"],link:"",memo:"",
+   pros:["위치 최고","카탈루냐 광장 도보 4분","보케리아 시장 도보 5분","마트 바로 앞 (까르푸, 바르셀로나 최대 규모)","루프탑 (투숙객 무료, 분위기 최고)","주방·테이블 있음 (스튜디오)","전자레인지 있음","로비 커피·탄산수 무료","짐 보관 무료 (체크아웃 후)"],
+   cons:["소음 있음 (후기)","객실 뷰 별로","주방 없음 (클래식룸)","청소는 6박 이상부터, 수건은 로비에 요청","샤워부스 물 튐 (배수 느리고 문이 잘 안 닫힘, 후기)","조식 비추 (가성비 안 좋음)"],
+   todo:["스튜디오로 예약하기","소음 적은 객실 요청하기","커넥팅룸 아닌 객실 요청하기"],reviews:["https://blog.naver.com/lomoul/224035832014"]},
+  {id:"seed-h10-metropolitan",v:9,hl:["보안 좋음 (보안요원 상주)"],force:["name","quote","krw","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"H10 Metropolitan",area:"람블라 데 카탈루냐 (에이샴플레)",price:null,krw:1100000/4,quote:"4박 ₩1,100,000 (더블룸) · ₩1,150,000 (테라스룸)",rating:null,metro:null,f:[],link:"https://www.h10hotels.com/es/hoteles-barcelona/h10-metropolitan/reserva?utm_source=google&utm_campaign=mirai_gha_cpc_es&utm_content=hme&h=1902&fe=20261114&fs=20261116&nh=1&cp=H10ESCAPE&currency=KRW&h1Ad=2&h1ni=0&tc_alt=5311&n_o_pst=n_o_pst&utm_medium=cpc",memo:"",
+   pros:["위치 최고","카탈루냐 광장 근처","보안 좋음 (보안요원 상주)","객실 커피머신 (캡슐 포함)","생수 무료 (매일 2병)","웰컴 드링크 (체크인 때)"],
+   cons:["소음 있음 (테라스에 나가면 옆 객실 소리가 다 들림)"],
+   todo:["소음 적은 객실 요청하기"],reviews:[{room:"더블룸",url:"https://blog.naver.com/01000_nb/224281744937"},{room:"테라스룸",url:"https://blog.naver.com/zyeonzz/224139508800"}]},
+  {id:"seed-olivia-plaza",v:8,hl:["카탈루냐 광장 뷰", "직원 친절 (후기 넘사벽, 허니문 룸 업그레이드 후기도 있음, 랜덤)", "소음 없음 (후기)", "어메니티 좋음 (올리비아 자체 제품, 97% 자연 원료)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"올리비아 플라자 호텔",area:"카탈루냐 광장",price:null,krw:1558327/4,
+   quote:"4박 ₩1,558,327 (공식 홈페이지, 2027-08-23 체크인, 성인 2명)",rating:null,metro:null,f:[],
+   link:"https://www.oliviaplazahotel.com/en/bookingstep1/?checkin=23%2F08%2F2027&idtokenprovider=54251781&currency=KRW&clientCode&hsri=02040&lang=en&nights=4&parties=W3siYWR1bHRzIjoyLCJjaGlsZHJlbiI6W119XQ%3D%3D&type=hotel&step=1",memo:"",
+   pros:["직원 친절 (후기 넘사벽, 허니문 룸 업그레이드 후기도 있음, 랜덤)","카탈루냐 광장 뷰","위치 좋음","공항버스 정류장 도보 2분","소음 없음 (후기)","루프탑 (10층 야외 테라스 바)","어메니티 좋음 (올리비아 자체 제품, 97% 자연 원료)","생수 무료","웰컴 드링크 (체크인 때)"],
+   cons:[],
+   todo:["시티뷰 객실로 예약하기 (추가 요금)","고층 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/bbummass/224358648832"]},
+  {id:"seed-onix-rambla",v:7,hl:["객실 넓고 깔끔 (붙박이장 큼)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"오닉스 람블라",area:"람블라 데 카탈루냐 (에이샴플레)",price:null,quote:"예약 안 열림 (예약 사이트에 매진으로 표시)",rating:null,metro:null,f:[],link:"",memo:"",
+   pros:["카탈루냐 광장 도보 5분","객실 넓고 깔끔 (붙박이장 큼)","짐 보관실 따로 있음 (보안 좋음)","짐 보관 가능 (다른 지역 다녀오는 동안, 우리는 필요 없을 듯)","조식 라운지 뜨거운 물 (컵라면 가능)"],
+   cons:["소음 심함","객실 뷰 별로 (시티뷰 아니면 옆 건물 뷰)","슬리퍼 없음","생수 유료 (500ml 1.5유로)"],
+   todo:["예약 열렸는지 다시 확인하기","시티뷰 객실로 예약하기","슬리퍼 챙겨가기"],reviews:["https://blog.naver.com/wldms1743/224429212266"]},
+  {id:"seed-hotel-cram",v:6,hl:["인테리어 깔끔 (제일 내 취향)", "호텔 안 미슐랭 2스타 레스토랑", "캐리어 펼치기 편함 (침대 밑 슬라이딩 선반, 1개만)", "샤워가운·슬리퍼 제공"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"Hotel Cram Barcelona",area:"에이샴플레",price:null,quote:"예약 안 열림",rating:null,metro:null,f:[],link:"",memo:"",
+   pros:["인테리어 깔끔 (제일 내 취향)","공항버스 정류장 도보 6분","객실 커피머신 (일리)","생수 무료 (매일 2병)","수건 리필","온수·수압 좋음","삼성 TV (넷플릭스 가능)","캐리어 펼치기 편함 (침대 밑 슬라이딩 선반, 1개만)","거울 큼 (화장하기 편함)","샤워가운·슬리퍼 제공","호텔 안 미슐랭 2스타 레스토랑"],
+   cons:["카탈루냐 광장 도보 13분 (다른 후보보다 멂)","전자레인지 없음"],
+   todo:["예약 열렸는지 다시 확인하기","신혼여행 메모 남기기 (카바 한 병 받은 후기)"],reviews:["https://blog.naver.com/eeuneebang/224403577777"]},
+  {id:"seed-citadines-les-halles",v:6,hl:["지하철역 바로 앞 (5개 노선, 웬만한 관광지 한 번에)", "근처 유명 빵집 (호텔 앞)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"호텔",name:"시타딘 레알 파리",area:"레알 (1구)",price:null,krw:1254136/4,quote:"4박 ₩1,254,136",rating:null,metro:1,f:[],link:"",memo:"지인 추천 (동생 친구)",
+   pros:["지하철역 바로 앞 (5개 노선, 웬만한 관광지 한 번에)","근처 유명 빵집 (호텔 앞)","보안 좋음 (보안카드 출입, 로비 직원 상주)","로비 커피머신·정수기"],
+   cons:["소음 있을 수 있음","수건·휴지 셀프, 세탁실 셀프","로비 정수기 종이컵 없음 (따로 요청)"],
+   todo:["고층 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/pasmal_jun/224255789395"]},
+  {id:"seed-citadines-tour-eiffel",v:5,hl:["에펠탑 도보 7~8분", "근처 대형마트, 늦게까지 하는 맛집·한식당 많음", "주방 도구 완비 (냄비, 프라이팬, 칼, 가위, 식기, 와인잔)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"호텔",name:"시타딘 투르 에펠 파리",area:"에펠탑 근처 (15구)",price:null,krw:1685732/4,quote:"4박 ₩1,685,732",rating:null,metro:null,f:["kitchen"],link:"",memo:"",
+   pros:["에펠탑 도보 7~8분","지하철 3개 노선, 버스 정류장 바로 앞","근처 대형마트, 늦게까지 하는 맛집·한식당 많음","보안 좋음 (카드키 출입, 1층 직원 상주)","짐 보관실 따로 있음","주방 도구 완비 (냄비, 프라이팬, 칼, 가위, 식기, 와인잔)","로비 커피머신·정수기"],
+   cons:["소음 있음 (지하철 지나갈 때, 아침부터 밤늦게까지. 에펠뷰 쪽은 덜함)","수건 셀프"],
+   todo:["에펠뷰 쪽 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/gjp6577/224367170950"]},
+  {id:"seed-parisjihyang-2",v:7,hl:["에펠뷰"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"한인민박",name:"파리지향 하우스 2호점",area:"현지인 거주 지역",price:null,krw:1621000/4,quote:"4박 ₩1,621,000",rating:null,metro:null,f:["washer"],link:"",memo:"",
+   pros:["에펠뷰","근처 마트·레스토랑 도보 5분 안 (현지인 거주 지역)","커피 캡슐 무료","생수 무료","세탁 가능"],
+   cons:["보증금 50만원 (체크인 때 내고 체크아웃 때 방 확인 후 돌려받음)"],
+   todo:["보증금 50만원 준비하기"],reviews:["https://blog.naver.com/yeon_418/224007915470"]},
+  {id:"seed-es-figueral-nou",v:1,pick:true,city:"mlr",type:"호텔",name:"Es Figueral Nou Hotel Rural & Spa Adults Only",area:"몬투이리 (마요르카 내륙)",price:null,krw:1290000/3,quote:"3박 ₩1,290,000",rating:null,metro:null,f:[],link:"",memo:"확정",
+   pros:["성인 전용","스파"],cons:[],todo:[],reviews:["https://blog.naver.com/dbwls5166/224419713233"]}
+].map(s=>({pick:false,...s,sample:false}));
+let state=load()||{items:[],nights:{paris:4,bcn:4,mlr:3},people:2,rate:1600,city:"all",sort:"total"};
+state.removed=state.removed||[];
+for(const i of state.items)i.f=(i.f||[]).filter(k=>k!=="ac"&&k!=="elevator");
+// 바르셀로나 4박 확정 (2027-08-23 체크인). 이전에 저장된 3박 값도 한 번 4박으로 맞춤
+if(!state.bcnNightsFixed){state.nights.bcn=4;state.bcnNightsFixed=true}
+// 여행 조건 고정: 파리 4박, 바르셀로나 4박, 마요르카 3박, 2명
+state.nights={paris:4,bcn:4,mlr:3};state.people=2;state.rate=state.rate||1600;
+state.items=state.items.filter(i=>!i.sample&&!["seed-hotel-barcelona-center","seed-h10-catalunya-plaza"].includes(i.id));
+for(const sd of SEEDS){
+  const cur=state.items.find(i=>i.id===sd.id);
+  if(!cur){if(!state.removed.includes(sd.id))state.items.push(sd);continue}
+  if((cur.v||1)<sd.v){
+    for(const k of ["pros","cons","todo","reviews"]){const has=x=>(cur[k]||[]).some(y=>JSON.stringify(y)===JSON.stringify(x));cur[k]=[...(cur[k]||[]),...(sd[k]||[]).filter(x=>!has(x))]}
+    for(const k of sd.force||[])cur[k]=sd[k];
+    for(const k of ["price","krw","quote","link","rating","metro","area"])if((cur[k]==null||cur[k]==="")&&sd[k]!=null&&sd[k]!=="")cur[k]=sd[k];
+    cur.v=sd.v;
+  }
+}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=n=>"€"+Math.round(n).toLocaleString("ko-KR");
+const krw=n=>Math.round(n*state.rate/1000)*1000;
+const won=n=>krw(n).toLocaleString("ko-KR")+"원";
+const fmt=n=>Math.round(n).toLocaleString("ko-KR")+"원";
+// 원화 견적은 그대로, 유로 요금만 환율로 환산
+const krwTotal=it=>!hasPrice(it)?null:(it.krw!=null&&it.krw!==""&&!(it.price!=null&&it.price!==""))?it.krw*(state.nights[it.city]||1):krw(total(it));
+const hasPrice=it=>(it.price!=null&&it.price!=="")||(it.krw!=null&&it.krw!=="");
+// 1박 유로 요금. 원화로 받은 견적은 현재 환율로 환산
+const perNight=it=>it.price!=null&&it.price!==""?+it.price:(hasPrice(it)?it.krw/state.rate:null);
+const total=it=>hasPrice(it)?perNight(it)*(state.nights[it.city]||1):null;
+const cheapest=l=>{const p=l.filter(hasPrice);return p.length?p.reduce((a,b)=>total(a)<=total(b)?a:b):null};
+
+function visible(){
+  let list=state.items.filter(i=>state.city==="all"||i.city===state.city);
+  let by={total:null,rating:(a,b)=>(b.rating||0)-(a.rating||0),
+    metro:(a,b)=>(a.metro??99)-(b.metro??99),value:(a,b)=>((b.rating||0)/(perNight(b)||1e9))-((a.rating||0)/(perNight(a)||1e9))}[state.sort];
+  if(state.sort==="total")by=(a,b)=>(total(a)??1e9)-(total(b)??1e9);
+  return list.sort(by);
+}
+
+function renderStats(){
+  const el=$("#stats");
+  const cities=state.city==="all"?CITIES:[state.city];
+  let html="";
+  for(const c of cities){
+    const l=state.items.filter(i=>i.city===c);
+    if(!l.length){html+=`<div class="stat"><div class="k">${CITY[c]}</div><div class="v">후보 없음</div></div>`;continue}
+    const pick=l.find(i=>i.pick);
+    const ref=pick||cheapest(l);
+    if(!ref||!hasPrice(ref)){html+=`<div class="stat" style="--c:var(--${c})"><div class="k">${CITY[c]} ${state.nights[c]}박${pick?" · 확정 숙소":""}</div><div class="v">요금 미입력</div><div class="n">${esc((pick||l[0]).name)}</div></div>`;continue}
+    html+=`<div class="stat" style="--c:var(--${c})"><div class="k">${CITY[c]} ${state.nights[c]}박 · ${pick?"확정":"최저가 기준"}</div>
+      <div class="v num">${fmt(krwTotal(ref))}</div>
+      <div class="pp num">1인 ${fmt(krwTotal(ref)/state.people)}</div>
+      <div class="n">${esc(ref.name)}</div></div>`;
+  }
+  if(state.city==="all"){
+    const cityHtml=html;html="";
+    const sum=CITIES.map(c=>{const l=state.items.filter(i=>i.city===c);if(!l.length)return 0;
+      const p=l.find(i=>i.pick)||cheapest(l);return p?krwTotal(p)||0:0}).reduce((a,b)=>a+b,0);
+    html+=`<div class="stat sum"><div class="k">숙박 합계 · ${CITIES.reduce((a,c)=>a+state.nights[c],0)}박</div>
+      <div class="v num">${fmt(sum)}</div>
+      <div class="pp num">1인 ${fmt(sum/state.people)}</div>
+      <div class="n">확정 숙소, 없으면 최저가로 계산</div></div>`+cityHtml;
+  }
+  el.innerHTML=html;
+}
+
+// 후기: "url" 또는 {url, room}. 객실별로 묶어서 보여줌
+const revUrl=x=>typeof x==="string"?x:x.url;
+const revRoom=x=>typeof x==="string"?"":(x.room||"");
+function reviewsHtml(list){
+  if(!list||!list.length)return `<div class="rev-none">블로그 후기 없음</div>`;
+  const n={};
+  for(const x of list){const k=revRoom(x);n[k]=(n[k]||0)+1}
+  const c={};
+  return `<div class="revs">${list.map(x=>{const room=revRoom(x),k=(c[room]=(c[room]||0)+1);
+    const label=(room?room+" 후기":"블로그 후기")+(n[room]>1?" "+k:"");
+    return `<a class="rev-btn" href="${esc(revUrl(x))}" target="_blank" rel="noopener">${esc(label)} <small>↗</small></a>`}).join("")}</div>`;
+}
+function renderGrid(){
+  const list=visible();
+  const grid=$("#grid");
+  $("#list-title").textContent=(state.city==="all"?"후보 숙소":CITY[state.city]+" 후보")+` (${list.length})`;
+  if(!list.length){grid.innerHTML=`<div class="empty">아직 후보가 없습니다.</div>`;return}
+  const isUnique=(it,x)=>(it.hl||[]).includes(x);
+  const best={};
+  // 비교 배지는 후보가 2곳 이상인 도시에만 (마요르카처럼 1곳 확정이면 표시 안 함)
+  for(const c of CITIES){const l=state.items.filter(i=>i.city===c);if(l.length<2)continue;
+    best[c]={cheap:cheapest(l)?.id,top:l.some(i=>i.rating)?l.reduce((a,b)=>(a.rating||0)>=(b.rating||0)?a:b).id:null,
+      near:l.some(i=>i.metro!=null&&i.metro!=="")?l.reduce((a,b)=>(a.metro??99)<=(b.metro??99)?a:b).id:null}}
+  const cardHtml=it=>{
+    const b=best[it.city]||{};
+    const badges=[it.pick&&"✓ 확정",b.cheap===it.id&&"최저가",b.top===it.id&&"최고 평점",b.near===it.id&&"역 최단"].filter(Boolean)
+      .map(t=>`<span class="badge">${t}</span>`).join("")+(it.sample?`<span class="badge ex">예시</span>`:"");
+    const chips=FEATURES.filter(([k])=>it.f.includes(k)).map(([k,l])=>`<span class="chip">${l}</span>`).join("");
+    const list=(cls,h,a)=>a&&a.length?`<div class="${cls}"><h4>${h}</h4><ul>${(cls==="pro"?[...a].sort((x,y)=>isUnique(it,y)-isUnique(it,x)):a).map(x=>`<li${cls==="pro"&&isUnique(it,x)?' class="hl" title="같은 도시 다른 후보에는 없는 점"':""}>${esc(x)}</li>`).join("")}</ul></div>`:"";
+    const notes=list("pro","장점",it.pros)+list("con","단점·주의",it.cons)+list("todo","예약 때 할 일",it.todo);
+    const n=state.nights[it.city];
+    return `<article class="card ${it.pick?"pick":""}" style="--c:var(--${it.city});--accent-soft:var(--${it.city}-soft)">
+      ${it.rating?`<div class="score"><b class="num">${(+it.rating).toFixed(1)}</b><span>평점</span></div>`:""}
+      <div class="head"><div class="city ${it.city}">${CITY[it.city]} · ${esc(it.type)}</div>
+        <h3>${esc(it.name)}</h3><div class="area">${esc(it.area)||"동네 미입력"}</div></div>
+      ${badges?`<div class="badges">${badges}</div>`:""}
+      <div class="price">${hasPrice(it)?`<span class="total num">${fmt(krwTotal(it))}</span><span class="per">${n}박 · 1박 ${fmt(krwTotal(it)/n)}</span>`:`<span class="total" style="font-size:16px;color:var(--muted)">요금 미입력</span>`}</div>
+      <dl class="rows">
+        <dt>1인 총액</dt><dd class="num">${hasPrice(it)?fmt(krwTotal(it)/state.people):"—"}</dd>
+        ${it.quote?`<dt>견적</dt><dd>${esc(it.quote)}</dd>`:""}
+        ${it.metro!=null&&it.metro!==""?`<dt>역까지</dt><dd>도보 ${it.metro}분</dd>`:""}
+      </dl>
+      ${chips?`<div class="chips">${chips}</div>`:""}
+      ${notes?`<div class="notes">${notes}</div>`:""}
+      ${it.memo?`<p class="memo">${esc(it.memo)}</p>`:""}
+      ${reviewsHtml(it.reviews)}
+      ${it.link?`<a class="book" href="${esc(it.link)}" target="_blank" rel="noopener">예약 페이지 ↗</a>`:""}
+      </article>`};
+  // 도시별로 묶어서 보여줌 (여행 순서: 파리 → 바르셀로나 → 마요르카)
+  grid.innerHTML=CITIES.map(c=>{const l=list.filter(i=>i.city===c);if(!l.length)return "";
+    return `<section class="group" style="--c:var(--${c})">
+      ${state.city==="all"?`<div class="group-h"><h3>${CITY[c]}</h3><span>${state.nights[c]}박 · ${l.length===1&&l[0].pick?"확정":`후보 ${l.length}곳`}</span></div>`:""}
+      <div class="cards">${l.map(cardHtml).join("")}</div></section>`}).join("");
+}
+
+function renderGuide(){
+  const cities=(state.city==="all"?CITIES:[state.city]).filter(c=>AREAS[c]);
+  $("#guide").innerHTML=cities.map(c=>`<div style="display:grid;gap:10px;--accent:var(--${c})">
+    <h2>${CITY[c]} 동네 고르기</h2>${c==="bcn"?`<p class="note">후보 숙소는 모두 람블라스·카탈루냐 광장 주변이라 보케리아 시장과 공항버스 정류장이 가깝습니다. 그래서 이 두 가지는 차별점(★)으로 표시하지 않았습니다.</p>`:""}
+    <div class="areas">${AREAS[c].map(([n,t,d])=>`<article><span class="tag">${t}</span><h3>${n}</h3><p>${d}</p></article>`).join("")}</div></div>`).join("")+
+    `<p class="note">모든 도시에서 1인 1박당 도시세(관광세)가 숙소 등급에 따라 현장에서 따로 붙는 경우가 많습니다. 예약 화면에서 세금 포함 여부를 확인하세요.</p>`;
+  $("#area-list").innerHTML=[...AREAS.paris,...AREAS.bcn].map(a=>`<option value="${a[0]}">`).join("");
+}
+
+function render(){
+  document.body.classList.toggle("c-bcn",state.city==="bcn");
+  document.body.classList.toggle("c-mlr",state.city==="mlr");
+  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.city===state.city));
+  $("#sort").value=state.sort;
+  $("#clear-ex").hidden=!state.items.some(i=>i.sample);
+  renderStats();renderGrid();renderGuide();save();
+}
+
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{state.city=b.dataset.city;render()});
+const num=(el,fn)=>el.addEventListener("input",()=>{const v=+el.value;if(v>0){fn(v);renderStats();renderGrid();save()}});
+
+$("#sort").onchange=e=>{state.sort=e.target.value;render()};
+$("#clear-ex").onclick=()=>{state.items=state.items.filter(i=>!i.sample);render()};
+
+// 폼
+$("#f-checks").innerHTML=FEATURES.map(([k,l])=>`<label><input type="checkbox" id="f-${k}" value="${k}">${l}</label>`).join("");
+let editing=null;
+function openForm(it){
+  editing=it?.id||null;
+    $("#f-city").value=it?.city||(state.city==="all"?"paris":state.city);
+  $("#f-type").value=it?.type||"호텔";
+  for(const k of ["name","area","price","krw","rating","metro","link","memo"])$("#f-"+k).value=it?.[k]??"";
+  for(const k of ["cons","todo"])$("#f-"+k).value=(it?.[k]||[]).join("\n");
+  $("#f-reviews").value=(it?.reviews||[]).map(x=>(revRoom(x)?revRoom(x)+" ":"")+revUrl(x)).join("\n");
+  $("#f-pros").value=(it?.pros||[]).map(x=>((it.hl||[]).includes(x)?"★ ":"")+x).join("\n");
+  FEATURES.forEach(([k])=>$("#f-"+k).checked=!!it?.f.includes(k));
+  $("#dlg").showModal();$("#f-name").focus();
+}
+$("#cancel").onclick=()=>$("#dlg").close();
+$("#form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const d={city:$("#f-city").value,type:$("#f-type").value,name:$("#f-name").value.trim(),area:$("#f-area").value.trim(),
+    price:$("#f-price").value===""?null:+$("#f-price").value,krw:$("#f-krw").value===""?null:+$("#f-krw").value,rating:$("#f-rating").value===""?null:+$("#f-rating").value,
+    metro:$("#f-metro").value===""?null:+$("#f-metro").value,link:/^https?:\/\//.test($("#f-link").value)?$("#f-link").value:"",
+    memo:$("#f-memo").value.trim(),
+    ...Object.fromEntries(["cons","todo"].map(k=>[k,$("#f-"+k).value.split("\n").map(x=>x.trim()).filter(Boolean)])),
+    pros:$("#f-pros").value.split("\n").map(x=>x.trim().replace(/^★\s*/,"")).filter(Boolean),
+    hl:$("#f-pros").value.split("\n").map(x=>x.trim()).filter(x=>x.startsWith("★")).map(x=>x.replace(/^★\s*/,"")),
+    reviews:$("#f-reviews").value.split("\n").map(x=>{const m=x.match(/https?:\/\/\S+/);if(!m)return null;const room=x.slice(0,m.index).trim();return room?{url:m[0],room}:m[0]}).filter(Boolean),f:FEATURES.map(([k])=>k).filter(k=>$("#f-"+k).checked)};
+  if(editing){const it=state.items.find(i=>i.id===editing);Object.assign(it,d,{sample:false})}
+  else state.items.push({...d,id:"s"+Date.now(),pick:false,sample:false});
+  $("#dlg").close();render();
+});
+
+// 카드 버튼 (삭제는 두 번 눌러 확인)
+$("#grid").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-act]");if(!b)return;
+  const it=state.items.find(i=>i.id===b.dataset.id);
+  if(b.dataset.act==="edit")return openForm(it);
+  if(b.dataset.act==="pick"){const was=it.pick;state.items.forEach(i=>{if(i.city===it.city)i.pick=false});it.pick=!was;return render()}
+  if(b.dataset.act==="del"){
+    if(b.dataset.armed){state.items=state.items.filter(i=>i.id!==it.id);if(it.id.startsWith("seed-"))state.removed.push(it.id);return render()}
+    b.dataset.armed="1";b.textContent="한 번 더 누르면 삭제";
+    setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent="삭제"}},3000);
+  }
+});
+
+$("#copy").onclick=()=>{
+  const rows=visible().map(i=>[CITY[i.city],i.name,i.area,hasPrice(i)?eur(perNight(i)):"",hasPrice(i)?eur(total(i)):"",hasPrice(i)?won(total(i)):"",i.rating??"",i.metro??"",i.pick?"확정":""].join("\t"));
+  const txt=["도시\t숙소\t동네\t1박\t총액\t원화\t평점\t역(분)\t상태",...rows].join("\n");
+  const msg=$("#copy-msg");
+  navigator.clipboard.writeText(txt).then(()=>msg.textContent="복사했습니다. 스프레드시트에 붙여넣을 수 있습니다.")
+    .catch(()=>msg.textContent="복사가 막혀 있습니다. 브라우저에서 직접 열어 다시 시도하세요.");
+};
+
+render();
+</script>
+
+</body>
+</html>
