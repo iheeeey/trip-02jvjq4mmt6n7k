@@ -272,41 +272,35 @@ const AREAS={
 const KEY="stay-compare-v1";
 const load=()=>{try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.items))return v}catch(e){}return null};
 const SEEDS=[
-  {id:"seed-citadines-ramblas",v:10,hl:["주방·테이블 있음 (스튜디오)", "마트 바로 앞 (까르푸, 바르셀로나 최대 규모)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"시타딘 람블라스",area:"람블라스 (카탈루냐 광장 근처)",
-   price:null,krw:1491343/4,quote:"4박 ₩1,491,343 (스튜디오)",rating:null,metro:4,f:["kitchen"],link:"",memo:"",
-   pros:["위치 최고","카탈루냐 광장 도보 4분","보케리아 시장 도보 5분","마트 바로 앞 (까르푸, 바르셀로나 최대 규모)","루프탑 (투숙객 무료, 분위기 최고)","주방·테이블 있음 (스튜디오)","전자레인지 있음","로비 커피·탄산수 무료","짐 보관 무료 (체크아웃 후)"],
-   cons:["소음 있음 (후기)","객실 뷰 별로","주방 없음 (클래식룸)","청소는 6박 이상부터, 수건은 로비에 요청","샤워부스 물 튐 (배수 느리고 문이 잘 안 닫힘, 후기)","조식 비추 (가성비 안 좋음)"],
-   todo:["스튜디오로 예약하기","소음 적은 객실 요청하기","커넥팅룸 아닌 객실 요청하기"],reviews:["https://blog.naver.com/lomoul/224035832014"]},
-  {id:"seed-h10-metropolitan",v:9,hl:["보안 좋음 (보안요원 상주)"],force:["name","quote","krw","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"H10 Metropolitan",area:"람블라 데 카탈루냐 (에이샴플레)",price:null,krw:1100000/4,quote:"4박 ₩1,100,000 (더블룸) · ₩1,150,000 (테라스룸)",rating:null,metro:null,f:[],link:"https://www.h10hotels.com/es/hoteles-barcelona/h10-metropolitan/reserva?utm_source=google&utm_campaign=mirai_gha_cpc_es&utm_content=hme&h=1902&fe=20261114&fs=20261116&nh=1&cp=H10ESCAPE&currency=KRW&h1Ad=2&h1ni=0&tc_alt=5311&n_o_pst=n_o_pst&utm_medium=cpc",memo:"",
+  {id:"seed-h10-metropolitan",v:10,hl:["보안 좋음 (보안요원 상주)"],force:["name","quote","krw","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"H10 메트로폴리탄",area:"람블라 데 카탈루냐 (에이샴플레)",price:null,krw:1100000/4,quote:"4박 ₩1,100,000 (더블룸) · ₩1,150,000 (테라스룸)",rating:null,metro:null,f:[],link:"https://www.h10hotels.com/es/hoteles-barcelona/h10-metropolitan/reserva?utm_source=google&utm_campaign=mirai_gha_cpc_es&utm_content=hme&h=1902&fe=20261114&fs=20261116&nh=1&cp=H10ESCAPE&currency=KRW&h1Ad=2&h1ni=0&tc_alt=5311&n_o_pst=n_o_pst&utm_medium=cpc",memo:"",
    pros:["위치 최고","카탈루냐 광장 근처","보안 좋음 (보안요원 상주)","객실 커피머신 (캡슐 포함)","생수 무료 (매일 2병)","웰컴 드링크 (체크인 때)"],
    cons:["소음 있음 (테라스에 나가면 옆 객실 소리가 다 들림)"],
    todo:["소음 적은 객실 요청하기"],reviews:[{room:"더블룸",url:"https://blog.naver.com/01000_nb/224281744937"},{room:"테라스룸",url:"https://blog.naver.com/zyeonzz/224139508800"}]},
-  {id:"seed-olivia-plaza",v:8,hl:["카탈루냐 광장 뷰", "직원 친절 (후기 넘사벽, 허니문 룸 업그레이드 후기도 있음, 랜덤)", "소음 없음 (후기)", "어메니티 좋음 (올리비아 자체 제품, 97% 자연 원료)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"올리비아 플라자 호텔",area:"카탈루냐 광장",price:null,krw:1558327/4,
+  {id:"seed-olivia-plaza",v:10,hl:["카탈루냐 광장 뷰", "직원 친절 (후기 넘사벽, 허니문 룸 업그레이드 후기도 있음, 랜덤)", "어메니티 좋음 (올리비아 자체 제품, 97% 자연 원료)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"올리비아 플라자 호텔",area:"카탈루냐 광장",price:null,krw:1558327/4,
    quote:"4박 ₩1,558,327 (공식 홈페이지, 2027-08-23 체크인, 성인 2명)",rating:null,metro:null,f:[],
    link:"https://www.oliviaplazahotel.com/en/bookingstep1/?checkin=23%2F08%2F2027&idtokenprovider=54251781&currency=KRW&clientCode&hsri=02040&lang=en&nights=4&parties=W3siYWR1bHRzIjoyLCJjaGlsZHJlbiI6W119XQ%3D%3D&type=hotel&step=1",memo:"",
    pros:["직원 친절 (후기 넘사벽, 허니문 룸 업그레이드 후기도 있음, 랜덤)","카탈루냐 광장 뷰","위치 좋음","공항버스 정류장 도보 2분","소음 없음 (후기)","루프탑 (10층 야외 테라스 바)","어메니티 좋음 (올리비아 자체 제품, 97% 자연 원료)","생수 무료","웰컴 드링크 (체크인 때)"],
    cons:[],
-   todo:["시티뷰 객실로 예약하기 (추가 요금)","고층 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/bbummass/224358648832"]},
-  {id:"seed-onix-rambla",v:7,hl:["객실 넓고 깔끔 (붙박이장 큼)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"오닉스 람블라",area:"람블라 데 카탈루냐 (에이샴플레)",price:null,quote:"예약 안 열림 (예약 사이트에 매진으로 표시)",rating:null,metro:null,f:[],link:"",memo:"",
+   todo:["시티뷰 객실로 예약하기 (추가 요금)","고층 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/sucharmi/224364452938"]},
+  {id:"seed-regina",v:3,hl:["위생·청결 최고 (후보 중)","객실 가장 넓음 (후보 중)"],force:["name","quote","krw","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"레지나 호텔",area:"카탈루냐 광장",price:null,krw:1220000/4,quote:"4박 ₩1,220,000 (듀오 발코니룸) · ₩1,500,711 (코너 발코니룸)",rating:null,metro:null,f:[],link:"https://reginahotel.com/",memo:"",
+   pros:["위생·청결 최고 (후보 중)","객실 가장 넓음 (후보 중)","위치 좋음","카탈루냐 광장·공항버스 정류장 도보 3분","소음 적음 (위치 대비 조용함)","웰컴 드링크 (체크인 때)"],
+   cons:[],todo:["고층 객실 요청하기 (메일로 요청하면 반영해 줌)"],reviews:[{room:"듀오 발코니룸",url:"https://blog.naver.com/aginginyouth/224145848846"},{room:"코너 발코니룸",url:"https://blog.naver.com/mellie_/224143863133"}]},
+  {id:"seed-onix-rambla",v:9,hidden:true,hl:[],force:["hidden","name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"오닉스 람블라",area:"람블라 데 카탈루냐 (에이샴플레)",price:null,quote:"예약 안 열림 (예약 사이트에 매진으로 표시)",rating:null,metro:null,f:[],link:"",memo:"",
    pros:["카탈루냐 광장 도보 5분","객실 넓고 깔끔 (붙박이장 큼)","짐 보관실 따로 있음 (보안 좋음)","짐 보관 가능 (다른 지역 다녀오는 동안, 우리는 필요 없을 듯)","조식 라운지 뜨거운 물 (컵라면 가능)"],
    cons:["소음 심함","객실 뷰 별로 (시티뷰 아니면 옆 건물 뷰)","슬리퍼 없음","생수 유료 (500ml 1.5유로)"],
    todo:["예약 열렸는지 다시 확인하기","시티뷰 객실로 예약하기","슬리퍼 챙겨가기"],reviews:["https://blog.naver.com/wldms1743/224429212266"]},
-  {id:"seed-hotel-cram",v:6,hl:["인테리어 깔끔 (제일 내 취향)", "호텔 안 미슐랭 2스타 레스토랑", "캐리어 펼치기 편함 (침대 밑 슬라이딩 선반, 1개만)", "샤워가운·슬리퍼 제공"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"bcn",type:"호텔",name:"Hotel Cram Barcelona",area:"에이샴플레",price:null,quote:"예약 안 열림",rating:null,metro:null,f:[],link:"",memo:"",
-   pros:["인테리어 깔끔 (제일 내 취향)","공항버스 정류장 도보 6분","객실 커피머신 (일리)","생수 무료 (매일 2병)","수건 리필","온수·수압 좋음","삼성 TV (넷플릭스 가능)","캐리어 펼치기 편함 (침대 밑 슬라이딩 선반, 1개만)","거울 큼 (화장하기 편함)","샤워가운·슬리퍼 제공","호텔 안 미슐랭 2스타 레스토랑"],
-   cons:["카탈루냐 광장 도보 13분 (다른 후보보다 멂)","전자레인지 없음"],
-   todo:["예약 열렸는지 다시 확인하기","신혼여행 메모 남기기 (카바 한 병 받은 후기)"],reviews:["https://blog.naver.com/eeuneebang/224403577777"]},
   {id:"seed-citadines-les-halles",v:6,hl:["지하철역 바로 앞 (5개 노선, 웬만한 관광지 한 번에)", "근처 유명 빵집 (호텔 앞)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"호텔",name:"시타딘 레알 파리",area:"레알 (1구)",price:null,krw:1254136/4,quote:"4박 ₩1,254,136",rating:null,metro:1,f:[],link:"",memo:"지인 추천 (동생 친구)",
    pros:["지하철역 바로 앞 (5개 노선, 웬만한 관광지 한 번에)","근처 유명 빵집 (호텔 앞)","보안 좋음 (보안카드 출입, 로비 직원 상주)","로비 커피머신·정수기"],
    cons:["소음 있을 수 있음","수건·휴지 셀프, 세탁실 셀프","로비 정수기 종이컵 없음 (따로 요청)"],
    todo:["고층 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/pasmal_jun/224255789395"]},
-  {id:"seed-citadines-tour-eiffel",v:5,hl:["에펠탑 도보 7~8분", "근처 대형마트, 늦게까지 하는 맛집·한식당 많음", "주방 도구 완비 (냄비, 프라이팬, 칼, 가위, 식기, 와인잔)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"호텔",name:"시타딘 투르 에펠 파리",area:"에펠탑 근처 (15구)",price:null,krw:1685732/4,quote:"4박 ₩1,685,732",rating:null,metro:null,f:["kitchen"],link:"",memo:"",
-   pros:["에펠탑 도보 7~8분","지하철 3개 노선, 버스 정류장 바로 앞","근처 대형마트, 늦게까지 하는 맛집·한식당 많음","보안 좋음 (카드키 출입, 1층 직원 상주)","짐 보관실 따로 있음","주방 도구 완비 (냄비, 프라이팬, 칼, 가위, 식기, 와인잔)","로비 커피머신·정수기"],
+  {id:"seed-citadines-tour-eiffel",v:6,hl:["에펠탑 도보 7~8분", "근처 대형마트, 늦게까지 하는 맛집·한식당 많음", "주방 도구 완비 (냄비, 프라이팬, 칼, 가위, 식기, 와인잔)"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"호텔",name:"시타딘 투르 에펠 파리",area:"에펠탑 근처 (15구)",price:null,krw:1685732/4,quote:"4박 ₩1,685,732",rating:null,metro:null,f:["kitchen"],link:"",memo:"",
+   pros:["에펠탑 도보 7~8분","에펠뷰 (에펠뷰 쪽 객실)","지하철 3개 노선, 버스 정류장 바로 앞","근처 대형마트, 늦게까지 하는 맛집·한식당 많음","보안 좋음 (카드키 출입, 1층 직원 상주)","짐 보관실 따로 있음","주방 도구 완비 (냄비, 프라이팬, 칼, 가위, 식기, 와인잔)","로비 커피머신·정수기"],
    cons:["소음 있음 (지하철 지나갈 때, 아침부터 밤늦게까지. 에펠뷰 쪽은 덜함)","수건 셀프"],
    todo:["에펠뷰 쪽 객실 요청하기 (소음 대비)"],reviews:["https://blog.naver.com/gjp6577/224367170950"]},
-  {id:"seed-parisjihyang-2",v:7,hl:["에펠뷰"],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"한인민박",name:"파리지향 하우스 2호점",area:"현지인 거주 지역",price:null,krw:1621000/4,quote:"4박 ₩1,621,000",rating:null,metro:null,f:["washer"],link:"",memo:"",
+  {id:"seed-parisjihyang-2",v:9,hl:[],force:["name","quote","f","pros","cons","todo","reviews","hl"],city:"paris",type:"한인민박",name:"파리지향 하우스 2호점",area:"현지인 거주 지역",price:null,krw:1621000/4,quote:"4박 ₩1,621,000",rating:null,metro:null,f:["washer"],link:"",memo:"",
    pros:["에펠뷰","근처 마트·레스토랑 도보 5분 안 (현지인 거주 지역)","커피 캡슐 무료","생수 무료","세탁 가능"],
    cons:["보증금 50만원 (체크인 때 내고 체크아웃 때 방 확인 후 돌려받음)"],
-   todo:["보증금 50만원 준비하기"],reviews:["https://blog.naver.com/yeon_418/224007915470"]},
+   todo:["보증금 50만원 준비하기"],reviews:["https://blog.naver.com/donedine/224004153523"]},
   {id:"seed-es-figueral-nou",v:1,pick:true,city:"mlr",type:"호텔",name:"Es Figueral Nou Hotel Rural & Spa Adults Only",area:"몬투이리 (마요르카 내륙)",price:null,krw:1290000/3,quote:"3박 ₩1,290,000",rating:null,metro:null,f:[],link:"",memo:"확정",
    pros:["성인 전용","스파"],cons:[],todo:[],reviews:["https://blog.naver.com/dbwls5166/224419713233"]}
 ].map(s=>({pick:false,...s,sample:false}));
@@ -317,7 +311,7 @@ for(const i of state.items)i.f=(i.f||[]).filter(k=>k!=="ac"&&k!=="elevator");
 if(!state.bcnNightsFixed){state.nights.bcn=4;state.bcnNightsFixed=true}
 // 여행 조건 고정: 파리 4박, 바르셀로나 4박, 마요르카 3박, 2명
 state.nights={paris:4,bcn:4,mlr:3};state.people=2;state.rate=state.rate||1600;
-state.items=state.items.filter(i=>!i.sample&&!["seed-hotel-barcelona-center","seed-h10-catalunya-plaza"].includes(i.id));
+state.items=state.items.filter(i=>!i.sample&&!["seed-hotel-barcelona-center","seed-h10-catalunya-plaza","seed-citadines-ramblas","seed-h10-casa-mimosa","seed-hotel-cram"].includes(i.id));
 for(const sd of SEEDS){
   const cur=state.items.find(i=>i.id===sd.id);
   if(!cur){if(!state.removed.includes(sd.id))state.items.push(sd);continue}
@@ -344,8 +338,10 @@ const perNight=it=>it.price!=null&&it.price!==""?+it.price:(hasPrice(it)?it.krw/
 const total=it=>hasPrice(it)?perNight(it)*(state.nights[it.city]||1):null;
 const cheapest=l=>{const p=l.filter(hasPrice);return p.length?p.reduce((a,b)=>total(a)<=total(b)?a:b):null};
 
+// 숨김(hidden) 숙소는 데이터에는 남기고 화면·합계에서만 뺌
+const shown=()=>state.items.filter(i=>!i.hidden);
 function visible(){
-  let list=state.items.filter(i=>state.city==="all"||i.city===state.city);
+  let list=shown().filter(i=>state.city==="all"||i.city===state.city);
   let by={total:null,rating:(a,b)=>(b.rating||0)-(a.rating||0),
     metro:(a,b)=>(a.metro??99)-(b.metro??99),value:(a,b)=>((b.rating||0)/(perNight(b)||1e9))-((a.rating||0)/(perNight(a)||1e9))}[state.sort];
   if(state.sort==="total")by=(a,b)=>(total(a)??1e9)-(total(b)??1e9);
@@ -357,7 +353,7 @@ function renderStats(){
   const cities=state.city==="all"?CITIES:[state.city];
   let html="";
   for(const c of cities){
-    const l=state.items.filter(i=>i.city===c);
+    const l=shown().filter(i=>i.city===c);
     if(!l.length){html+=`<div class="stat"><div class="k">${CITY[c]}</div><div class="v">후보 없음</div></div>`;continue}
     const pick=l.find(i=>i.pick);
     const ref=pick||cheapest(l);
@@ -369,7 +365,7 @@ function renderStats(){
   }
   if(state.city==="all"){
     const cityHtml=html;html="";
-    const sum=CITIES.map(c=>{const l=state.items.filter(i=>i.city===c);if(!l.length)return 0;
+    const sum=CITIES.map(c=>{const l=shown().filter(i=>i.city===c);if(!l.length)return 0;
       const p=l.find(i=>i.pick)||cheapest(l);return p?krwTotal(p)||0:0}).reduce((a,b)=>a+b,0);
     html+=`<div class="stat sum"><div class="k">숙박 합계 · ${CITIES.reduce((a,c)=>a+state.nights[c],0)}박</div>
       <div class="v num">${fmt(sum)}</div>
@@ -399,7 +395,7 @@ function renderGrid(){
   const isUnique=(it,x)=>(it.hl||[]).includes(x);
   const best={};
   // 비교 배지는 후보가 2곳 이상인 도시에만 (마요르카처럼 1곳 확정이면 표시 안 함)
-  for(const c of CITIES){const l=state.items.filter(i=>i.city===c);if(l.length<2)continue;
+  for(const c of CITIES){const l=shown().filter(i=>i.city===c);if(l.length<2)continue;
     best[c]={cheap:cheapest(l)?.id,top:l.some(i=>i.rating)?l.reduce((a,b)=>(a.rating||0)>=(b.rating||0)?a:b).id:null,
       near:l.some(i=>i.metro!=null&&i.metro!=="")?l.reduce((a,b)=>(a.metro??99)<=(b.metro??99)?a:b).id:null}}
   const cardHtml=it=>{
